@@ -6,6 +6,75 @@
     <meta name="description" content="Калькулятор питания — расчёт калорий и БЖУ для похудения, поддержания веса или набора массы.">
     <title>NutriCalc — Калькулятор питания и БЖУ</title>
     <link rel="stylesheet" href="css/main.css">
+    <script>
+        (function () {
+            var saved = localStorage.getItem("theme");
+            var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            var theme = saved || (prefersDark ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
+    <style>
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        [data-theme="dark"] {
+            --gradient: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            --card-bg: #1e293b;
+            --text-on-card: #f1f5f9;
+            --text-muted-on-card: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="dark"] .feature-card,
+        [data-theme="dark"] .how-it-works {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        [data-theme="dark"] .feature-card h3,
+        [data-theme="dark"] .how-it-works h2 {
+            color: var(--text-on-card);
+        }
+
+        [data-theme="dark"] .feature-card p,
+        [data-theme="dark"] .steps li {
+            color: var(--text-muted-on-card);
+        }
+
+        [data-theme="dark"] .steps li {
+            border-bottom-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-on-card);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .btn-secondary:hover {
+            background: #334155;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,6 +83,7 @@
     <div class="nav-links">
         <a href="index.html" class="nav-link nav-link--active">Главная</a>
         <a href="calculator.html" class="nav-link">Калькулятор</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Переключить тему" title="Переключить тему">🌙</button>
     </div>
 </nav>
 
@@ -63,6 +133,31 @@
 <footer class="footer">
     <p>NutriCalc © 2026 — Калькулятор питания и БЖУ</p>
 </footer>
+
+<script>
+    (function () {
+        var toggle = document.getElementById("theme-toggle");
+        var icons = { light: "🌙", dark: "☀️" };
+
+        function updateIcon(theme) {
+            toggle.textContent = theme === "dark" ? icons.dark : icons.light;
+            toggle.setAttribute("aria-label", theme === "dark" ? "Включить светлую тему" : "Включить тёмную тему");
+        }
+
+        updateIcon(document.documentElement.getAttribute("data-theme"));
+
+        toggle.addEventListener("click", function () {
+            var current = document.documentElement.getAttribute("data-theme");
+            var next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+            updateIcon(next);
+        });
+    })();
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
